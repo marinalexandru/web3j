@@ -160,12 +160,21 @@ public class MnemonicUtils {
     }
 
     private static List<String> populateWordList() {
-        URL url = Thread.currentThread().getContextClassLoader()
-                .getResource("en-mnemonic-word-list.txt");
+        InputStream inputStream = Thread.currentThread().getContextClassLoader()
+            .getResourceAsStream("en-mnemonic-word-list.txt");
         try {
-            return Files.readAllLines(Paths.get(url.toURI()));
+            return readAllLines(inputStream);
         } catch (Exception e) {
             return Collections.emptyList();
         }
+    }
+
+    public static List<String> readAllLines(InputStream inputStream) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        List<String> data = new ArrayList<>();
+        for (String line; (line = br.readLine()) != null; ) {
+            data.add(line);
+        }
+        return data;
     }
 }
